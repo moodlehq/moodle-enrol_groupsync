@@ -38,7 +38,10 @@ class enrol_groupsync_edit_form extends moodleform {
 
         $mform->addElement('header','general', get_string('pluginname', 'enrol_groupsync'));
 
-        $mform->addElement('text', 'name', get_string('custominstancename', 'enrol'));
+        $nameattribs = array('size' => '20', 'maxlength' => '255');
+        $mform->addElement('text', 'name', get_string('custominstancename', 'enrol'), $nameattribs);
+        $mform->setType('name', PARAM_TEXT);
+        $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'server');
 
         $cohorts = array('' => get_string('choosedots'));
         list($sqlparents, $params) = $DB->get_in_or_equal($coursecontext->get_parent_context_ids());
