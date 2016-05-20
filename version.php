@@ -17,16 +17,17 @@
 /**
  * Cohort to group plugin version specification.
  *
- * @package    enrol_groupsync
- * @copyright  2012 Petr Skoda {@link http://skodak.org}
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     enrol_groupsync
+ * @copyright   2012 Petr Skoda {@link http://skodak.org}
+ * @copyright   2016 David Mudrák <david@moodle.com>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'enrol_groupsync';
-$plugin->release = '1.0.0';
-$plugin->version = 2012122000;
-$plugin->requires = 2012110900;
+$plugin->release = '1.1.0';
+$plugin->version = 2016052000;
+$plugin->requires = 2016052000;
 $plugin->cron = 3600;
 $plugin->maturity = MATURITY_STABLE;
