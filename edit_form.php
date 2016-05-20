@@ -36,7 +36,7 @@ class enrol_groupsync_edit_form extends moodleform {
         list($instance, $plugin, $course) = $this->_customdata;
         $coursecontext = context_course::instance($course->id);
 
-        $mform->addElement('header','general', get_string('pluginname', 'enrol_groupsync'));
+        $mform->addElement('header', 'general', get_string('pluginname', 'enrol_groupsync'));
 
         $nameattribs = array('size' => '20', 'maxlength' => '255');
         $mform->addElement('text', 'name', get_string('custominstancename', 'enrol'), $nameattribs);
