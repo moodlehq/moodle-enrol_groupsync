@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Cohort to group sync functional test.
+ * Unit tests for synchronisation of cohort to group membership.
  *
  * @package    enrol_groupsync
  * @category   phpunit
@@ -46,7 +46,10 @@ class enrol_groupsync_testcase extends advanced_testcase {
         set_config('enrol_plugins_enabled', implode(',', $enabled));
     }
 
-    public function test_handler_sync() {
+    /**
+     * Test implicit sync via observed events.
+     */
+    public function test_observer_sync() {
         global $DB;
 
         $this->resetAfterTest();
@@ -164,6 +167,9 @@ class enrol_groupsync_testcase extends advanced_testcase {
         $this->assertFalse($DB->record_exists('groups_members', array('groupid'=>$group1a->id, 'userid'=>$user3->id)));
     }
 
+    /**
+     * Test explicit sync via enrol_groupsync_sync()
+     */
     public function test_sync() {
         global $DB;
         $this->resetAfterTest();

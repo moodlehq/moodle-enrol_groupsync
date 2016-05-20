@@ -15,50 +15,36 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Cohort to group sync event handler definition.
+ * Subscribes our observer methods to relevant events
  *
- * @package enrol_groupsync
- * @category event
- * @copyright 2012 Petr Skoda {@link http://skodak.org}
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     enrol_groupsync
+ * @category    event
+ * @copyright   2012 Petr Skoda {@link http://skodak.org}
+ * @copyright   2016 David Mudrák <david@moodle.com>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-/* List of handlers. */
-$handlers = array (
-    'user_enrolled' => array (
-        'handlerfile'     => '/enrol/groupsync/locallib.php',
-        'handlerfunction' => array('enrol_groupsync_handler', 'user_enrolled'),
-        'schedule'        => 'instant',
-        'internal'        => 1,
-    ),
-
-    'user_unenrolled' => array (
-        'handlerfile'     => '/enrol/groupsync/locallib.php',
-        'handlerfunction' => array('enrol_groupsync_handler', 'user_unenrolled'),
-        'schedule'        => 'instant',
-        'internal'        => 1,
-    ),
-
-    'cohort_member_added' => array (
-        'handlerfile'     => '/enrol/groupsync/locallib.php',
-        'handlerfunction' => array('enrol_groupsync_handler', 'member_added'),
-        'schedule'        => 'instant',
-        'internal'        => 1,
-    ),
-
-    'cohort_member_removed' => array (
-        'handlerfile'     => '/enrol/groupsync/locallib.php',
-        'handlerfunction' => array('enrol_groupsync_handler', 'member_removed'),
-        'schedule'        => 'instant',
-        'internal'        => 1,
-    ),
-
-    'cohort_deleted' => array (
-        'handlerfile'     => '/enrol/groupsync/locallib.php',
-        'handlerfunction' => array('enrol_groupsync_handler', 'deleted'),
-        'schedule'        => 'instant',
-        'internal'        => 1,
-    ),
-);
+$observers = [
+    [
+        'eventname' => '\core\event\user_enrolment_created',
+        'callback' => 'enrol_groupsync_observer::user_enrolment_created',
+    ],
+    [
+        'eventname' => '\core\event\user_enrolment_deleted',
+        'callback' => 'enrol_groupsync_observer::user_enrolment_deleted',
+    ],
+    [
+        'eventname' => '\core\event\cohort_member_added',
+        'callback' => 'enrol_groupsync_observer::cohort_member_added',
+    ],
+    [
+        'eventname' => '\core\event\cohort_member_removed',
+        'callback' => 'enrol_groupsync_observer::cohort_member_removed',
+    ],
+    [
+        'eventname' => '\core\event\cohort_deleted',
+        'callback' => 'enrol_groupsync_observer::cohort_deleted',
+    ],
+];
