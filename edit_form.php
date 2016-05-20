@@ -24,12 +24,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once("$CFG->libdir/formslib.php");
+require_once($CFG->libdir.'/formslib.php');
 
 class enrol_groupsync_edit_form extends moodleform {
 
-    function definition() {
-        global $CFG, $DB;
+    public function definition() {
+        global $DB;
 
         $mform  = $this->_form;
 
@@ -63,7 +63,7 @@ class enrol_groupsync_edit_form extends moodleform {
 
         $groups = array('' => get_string('choosedots'));
         foreach (groups_get_all_groups($course->id) as $group) {
-            $groups[$group->id] = format_string($group->name, true, array('context'=>$coursecontext));
+            $groups[$group->id] = format_string($group->name, true, array('context' => $coursecontext));
         }
         $mform->addElement('select', 'customint2', get_string('addgroup', 'enrol_groupsync'), $groups);
         $mform->addRule('customint2', get_string('required'), 'required', null, 'client');
@@ -76,13 +76,14 @@ class enrol_groupsync_edit_form extends moodleform {
         $this->set_data($instance);
     }
 
-    function validation($data, $files) {
+    public function validation($data, $files) {
         global $DB;
 
         $errors = parent::validation($data, $files);
 
-        $params = array('customint2'=>$data['customint2'], 'customint1'=>$data['customint1'], 'courseid'=>$data['courseid']);
-        if ($DB->record_exists_select('enrol', "customint1 = :customint1 AND customint2 = :customint2 AND courseid = :courseid AND enrol = 'groupsync'", $params)) {
+        $params = array('customint2' => $data['customint2'], 'customint1' => $data['customint1'], 'courseid' => $data['courseid']);
+        if ($DB->record_exists_select('enrol', "customint1 = :customint1 AND customint2 = :customint2 AND courseid = :courseid
+                AND enrol = 'groupsync'", $params)) {
             $errors['customint2'] = get_string('instanceexists', 'enrol_groupsync');
         }
 

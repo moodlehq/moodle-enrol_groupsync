@@ -29,17 +29,17 @@ require_once("$CFG->dirroot/group/lib.php");
 
 $courseid = required_param('courseid', PARAM_INT);
 
-$course = $DB->get_record('course', array('id'=>$courseid), '*', MUST_EXIST);
+$course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
 $context = context_course::instance($course->id, MUST_EXIST);
 
 require_login($course);
 require_capability('moodle/course:enrolconfig', $context);
 require_capability('enrol/groupsync:config', $context);
 
-$PAGE->set_url('/enrol/groupsync/edit.php', array('courseid'=>$course->id));
+$PAGE->set_url('/enrol/groupsync/edit.php', array('courseid' => $course->id));
 $PAGE->set_pagelayout('admin');
 
-$returnurl = new moodle_url('/enrol/instances.php', array('id'=>$course->id));
+$returnurl = new moodle_url('/enrol/instances.php', array('id' => $course->id));
 if (!enrol_is_enabled('groupsync')) {
     redirect($returnurl);
 }
@@ -52,7 +52,7 @@ $instance->customint1 = ''; // Cohort id.
 $instance->customint2 = ''; // Group id.
 
 // Try and make the manage instances node on the navigation active.
-navigation_node::override_active_url(new moodle_url('/enrol/instances.php', array('id'=>$course->id)));
+navigation_node::override_active_url(new moodle_url('/enrol/instances.php', array('id' => $course->id)));
 
 $mform = new enrol_groupsync_edit_form(null, array($instance, $enrol, $course));
 
@@ -60,7 +60,8 @@ if ($mform->is_cancelled()) {
     redirect($returnurl);
 
 } else if ($data = $mform->get_data()) {
-    $enrol->add_instance($course, array('name'=>$data->name, 'status'=>ENROL_INSTANCE_ENABLED, 'customint1'=>$data->customint1, 'customint2'=>$data->customint2));
+    $enrol->add_instance($course, array('name' => $data->name, 'status' => ENROL_INSTANCE_ENABLED,
+        'customint1' => $data->customint1, 'customint2' => $data->customint2));
     enrol_groupsync_sync($course->id);
     redirect($returnurl);
 }

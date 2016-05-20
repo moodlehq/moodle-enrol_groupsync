@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die();
  * @param bool $verbose verbose CLI output
  * @return int 0 means ok, 1 means error, 2 means plugin disabled
  */
-function enrol_groupsync_sync($courseid = NULL, $verbose = false) {
+function enrol_groupsync_sync($courseid = null, $verbose = false) {
     global $CFG, $DB;
     require_once("$CFG->dirroot/group/lib.php");
 
@@ -60,11 +60,11 @@ function enrol_groupsync_sync($courseid = NULL, $verbose = false) {
     }
 
     if ($courseid) {
-        $params = array('enabled'=>ENROL_INSTANCE_ENABLED, 'courseid'=>$courseid);
+        $params = array('enabled' => ENROL_INSTANCE_ENABLED, 'courseid' => $courseid);
         $courseselect = "AND e.courseid = :courseid";
 
     } else {
-        $params = array('enabled'=>ENROL_INSTANCE_ENABLED);
+        $params = array('enabled' => ENROL_INSTANCE_ENABLED);
         $courseselect = "";
     }
 
@@ -75,7 +75,9 @@ function enrol_groupsync_sync($courseid = NULL, $verbose = false) {
               JOIN {enrol} e ON (e.courseid = g.courseid AND e.enrol = 'groupsync')
               JOIN {cohort} c ON (c.id = e.customint1)
          LEFT JOIN {cohort_members} cm ON (cm.cohortid = c.id AND cm.userid = gm.userid)
-             WHERE gm.component = 'enrol_groupsync' AND gm.itemid = e.id AND (e.status <> :enabled OR g.id <> e.customint2 OR cm.id IS NULL) $courseselect";
+             WHERE gm.component = 'enrol_groupsync'
+                   AND gm.itemid = e.id
+                   AND (e.status <> :enabled OR g.id <> e.customint2 OR cm.id IS NULL) $courseselect";
     $rs = $DB->get_recordset_sql($sql, $params);
     foreach ($rs as $gm) {
         groups_remove_member($gm->groupid, $gm->userid);

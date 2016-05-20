@@ -25,10 +25,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 function xmldb_enrol_groupsync_uninstall() {
-    global $CFG, $DB;
+    global $DB;
 
     $cohort = enrol_get_plugin('groupsync');
-    $rs = $DB->get_recordset('enrol', array('enrol'=>'groupsync'));
+    $rs = $DB->get_recordset('enrol', array('enrol' => 'groupsync'));
     foreach ($rs as $instance) {
         $cohort->delete_instance($instance);
     }

@@ -45,17 +45,17 @@ class enrol_groupsync_plugin extends enrol_plugin {
 
         } else if (empty($instance->name)) {
             $enrol = $this->get_name();
-            $cohort = $DB->get_record('cohort', array('id'=>$instance->customint1));
-            $group = $DB->get_record('groups', array('id'=>$instance->customint2));
+            $cohort = $DB->get_record('cohort', array('id' => $instance->customint1));
+            $group = $DB->get_record('groups', array('id' => $instance->customint2));
             if ($cohort and $group) {
-                $groupname = format_string($group->name, true, array('context'=>context_course::instance($instance->courseid)));
-                $cohortname = format_string($cohort->name, true, array('context'=>context::instance_by_id($cohort->contextid)));
+                $groupname = format_string($group->name, true, array('context' => context_course::instance($instance->courseid)));
+                $cohortname = format_string($cohort->name, true, array('context' => context::instance_by_id($cohort->contextid)));
                 return get_string('pluginname', 'enrol_'.$enrol) . ' (' . $cohortname . ' -> ' . $groupname . ')';
             } else {
                 return get_string('pluginname', 'enrol_'.$enrol) . ' - ' . get_string('error');
             }
         } else {
-            return format_string($instance->name, true, array('context'=>context_course::instance($instance->courseid)));
+            return format_string($instance->name, true, array('context' => context_course::instance($instance->courseid)));
         }
     }
 
@@ -66,10 +66,10 @@ class enrol_groupsync_plugin extends enrol_plugin {
      */
     public function get_newinstance_link($courseid) {
         if (!$this->can_add_new_instances($courseid)) {
-            return NULL;
+            return null;
         }
         // Multiple instances supported - multiple parent courses linked.
-        return new moodle_url('/enrol/groupsync/edit.php', array('courseid'=>$courseid));
+        return new moodle_url('/enrol/groupsync/edit.php', array('courseid' => $courseid));
     }
 
     /**
@@ -83,7 +83,8 @@ class enrol_groupsync_plugin extends enrol_plugin {
         global $DB;
 
         $coursecontext = context_course::instance($courseid);
-        if (!has_capability('moodle/course:enrolconfig', $coursecontext) or !has_capability('enrol/groupsync:config', $coursecontext)) {
+        if (!has_capability('moodle/course:enrolconfig', $coursecontext)
+                or !has_capability('enrol/groupsync:config', $coursecontext)) {
             return false;
         }
         list($sqlparents, $params) = $DB->get_in_or_equal($coursecontext->get_parent_context_ids());
@@ -119,7 +120,6 @@ class enrol_groupsync_plugin extends enrol_plugin {
      * @return array
      */
     public function get_action_icons(stdClass $instance) {
-        global $OUTPUT;
 
         if ($instance->enrol !== 'groupsync') {
             throw new coding_exception('invalid enrol instance!');
@@ -182,7 +182,7 @@ class enrol_groupsync_plugin extends enrol_plugin {
 
         // NOTE: We must delete groups manually, there are no user enrolments that would clean them up.
 
-        if ($gms = $DB->get_records('groups_members', array('component'=>'enrol_'.$name, 'itemid'=>$instance->id))) {
+        if ($gms = $DB->get_records('groups_members', array('component' => 'enrol_'.$name, 'itemid' => $instance->id))) {
             foreach ($gms as $gm) {
                 groups_remove_member($gm->groupid, $gm->userid);
             }
