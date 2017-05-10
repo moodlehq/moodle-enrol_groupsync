@@ -1,4 +1,8 @@
-## v1.1.0 ##
+## 1.1.1 ##
+
+* Coding guidelines violations fixed.
+
+## 1.1.0 ##
 
 * New version for Moodle 3.1 and higher.
 * Fixed missing param type of the custom name at the instance editing form and

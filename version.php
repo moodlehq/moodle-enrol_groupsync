@@ -26,8 +26,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'enrol_groupsync';
-$plugin->release = '1.1.0';
-$plugin->version = 2016052000;
+$plugin->release = '1.1.1';
+$plugin->version = 2017050900;
 $plugin->requires = 2016052000;
 $plugin->cron = 3600;
 $plugin->maturity = MATURITY_STABLE;
