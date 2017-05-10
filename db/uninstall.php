@@ -24,6 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Delete all enrolment instances on plugin uninstallation.
+ */
 function xmldb_enrol_groupsync_uninstall() {
     global $DB;
 

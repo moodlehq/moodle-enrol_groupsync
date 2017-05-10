@@ -26,7 +26,8 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Group-cohort sync plugin.
- * @author Petr Skoda
+ *
+ * @copyright Petr Skoda
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class enrol_groupsync_plugin extends enrol_plugin {

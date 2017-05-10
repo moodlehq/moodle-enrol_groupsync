@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Unit tests for synchronisation of cohort to group membership.
+ * Provides the {@link enrol_groupsync_testcase} class.
  *
  * @package    enrol_groupsync
- * @category   phpunit
+ * @category   test
  * @copyright  2012 Petr Skoda {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -30,8 +30,17 @@ require_once($CFG->dirroot.'/enrol/groupsync/locallib.php');
 require_once($CFG->dirroot.'/cohort/lib.php');
 require_once($CFG->dirroot.'/group/lib.php');
 
+/**
+ * Unit tests for synchronisation of cohort to group membership.
+ *
+ * @copyright  2012 Petr Skoda {@link http://skodak.org}
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class enrol_groupsync_testcase extends advanced_testcase {
 
+    /**
+     * Helper function to enable the plugin.
+     */
     protected function enable_plugin() {
         $enabled = enrol_get_plugins(true);
         $enabled['groupsync'] = true;
@@ -39,6 +48,9 @@ class enrol_groupsync_testcase extends advanced_testcase {
         set_config('enrol_plugins_enabled', implode(',', $enabled));
     }
 
+    /**
+     * Helper function to disable the plugin.
+     */
     protected function disable_plugin() {
         $enabled = enrol_get_plugins(true);
         unset($enabled['groupsync']);

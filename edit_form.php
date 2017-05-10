@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Adds instance form
+ * Provides the {@link enrol_groupsync_edit_form} class.
  *
  * @package    enrol_groupsync
  * @copyright  2012 Petr Skoda {@link http://skodak.org}
@@ -26,8 +26,17 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir.'/formslib.php');
 
+/**
+ * Enrolment instance edit form.
+ *
+ * @copyright  2012 Petr Skoda {@link http://skodak.org}
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class enrol_groupsync_edit_form extends moodleform {
 
+    /**
+     * Defines the form fields.
+     */
     public function definition() {
         global $DB;
 
@@ -76,6 +85,13 @@ class enrol_groupsync_edit_form extends moodleform {
         $this->set_data($instance);
     }
 
+    /**
+     * Validates the form data.
+     *
+     * @param array $data submitted form data
+     * @param array $files not used here
+     * @return array errors
+     */
     public function validation($data, $files) {
         global $DB;
 
