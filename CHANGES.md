@@ -1,3 +1,7 @@
+## 1.1.2 ##
+
+* Behat test updated for Moodle 3.3 and 3.4
+
 ## 1.1.1 ##
 
 * Coding guidelines violations fixed.
