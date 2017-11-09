@@ -37,11 +37,9 @@ Feature: Cohort membership is one-way synchronised with the group membership
     And I press "Save changes"
     And I add "Studie One (student1@example.com)" user to "Even" cohort members
     And I add "Studie Two (student2@example.com)" user to "Odd" cohort members
-    And I am on homepage
-    And I follow "Courses"
 
   Scenario: Adding groupsync enrolment instance populates the group members
-    Given I follow "Course 001"
+    Given I am on "Course 001" course homepage
     And the following "course enrolments" exist:
       | user     | course | role    |
       | student1 | C001   | student |
@@ -60,7 +58,7 @@ Feature: Cohort membership is one-way synchronised with the group membership
     And I should not see "Groupcourse 2" in the "Studie Three" "table_row"
 
   Scenario: Enrolling cohort member puts them into the group
-    Given I follow "Course 001"
+    Given I am on "Course 001" course homepage
     When I add "Cohort members to group" enrolment method with:
       | Cohort       | Odd numbered users  |
       | Add to group | Groupcourse 2       |
@@ -73,7 +71,7 @@ Feature: Cohort membership is one-way synchronised with the group membership
     And I should not see "Groupcourse 2" in the "Studie One" "table_row"
 
   Scenario: Becoming cohort member leads to becoming group member
-    Given I follow "Course 001"
+    Given I am on "Course 001" course homepage
     And the following "course enrolments" exist:
       | user     | course | role    |
       | student4 | C001   | student |
@@ -83,8 +81,6 @@ Feature: Cohort membership is one-way synchronised with the group membership
     And I navigate to "Enrolled users" node in "Course administration > Users"
     And I should not see "Groupcourse 2" in the "Studie Four" "table_row"
     When I add "Studie Four (student4@example.com)" user to "Odd" cohort members
-    And I am on homepage
-    And I follow "Courses"
-    And I follow "Course 001"
+    And I am on "Course 001" course homepage
     And I navigate to "Enrolled users" node in "Course administration > Users"
     Then I should see "Groupcourse 2" in the "Studie Four" "table_row"
