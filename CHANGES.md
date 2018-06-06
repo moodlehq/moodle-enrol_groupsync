@@ -1,3 +1,7 @@
+## 1.2.0 ##
+
+* Implement the privacy API
+
 ## 1.1.2 ##
 
 * Behat test updated for Moodle 3.3 and 3.4
