@@ -94,6 +94,48 @@ class enrol_groupsync_privacy_testcase extends \core_privacy\tests\provider_test
     }
 
     /**
+     * Test for provider::get_users_in_context().
+     */
+    public function test_get_users_in_context() {
+        global $DB;
+
+        $this->resetAfterTest();
+
+        $plugin = enrol_get_plugin('groupsync');
+        $user1 = $this->getDataGenerator()->create_user();
+        $cat1 = $this->getDataGenerator()->create_category();
+        $course1 = $this->getDataGenerator()->create_course(array('category' => $cat1->id));
+        $group1 = $this->getDataGenerator()->create_group(array('courseid' => $course1->id));
+        $studentrole = $DB->get_record('role', array('shortname' => 'student'));
+        $this->getDataGenerator()->enrol_user($user1->id, $course1->id, $studentrole->id, 'manual');
+
+        $cohort1 = $this->getDataGenerator()->create_cohort(
+            array('contextid' => context_coursecat::instance($cat1->id)->id));
+        $plugin->add_instance($course1, array(
+            'customint1' => $cohort1->id,
+            'roleid' => $studentrole->id,
+            'customint2' => $group1->id)
+        );
+
+        cohort_add_member($cohort1->id, $user1->id);
+
+        // Check if user1 is enrolled into course1 in group 1.
+        $this->assertEquals(1, $DB->count_records('role_assignments', array()));
+        $this->assertTrue($DB->record_exists('groups_members', array(
+                'groupid' => $group1->id,
+                'userid' => $user1->id,
+                'component' => 'enrol_groupsync')
+        ));
+
+        $context = \context_course::instance($course1->id);
+
+        $userlist = new \core_privacy\local\request\userlist($context, 'enrol_groupsync');
+        \enrol_groupsync\privacy\provider::get_users_in_context($userlist);
+
+        $this->assertEquals([$user1->id], $userlist->get_userids());
+    }
+
+    /**
      * Test that user data is exported correctly.
      */
     public function test_export_user_data() {
@@ -223,5 +265,74 @@ class enrol_groupsync_privacy_testcase extends \core_privacy\tests\provider_test
 
         $this->assertEquals(1, $DB->count_records('groups_members', ['groupid' => $group1->id]));
         $this->assertEquals(1, $DB->count_records('groups_members', ['groupid' => $group2->id]));
+    }
+
+    /**
+     * Test for provider::delete_data_for_users().
+     */
+    public function test_delete_data_for_users() {
+        global $DB;
+
+        $this->resetAfterTest();
+
+        $plugin = enrol_get_plugin('groupsync');
+
+        $user1 = $this->getDataGenerator()->create_user();
+        $user2 = $this->getDataGenerator()->create_user();
+        $user3 = $this->getDataGenerator()->create_user();
+
+        $cat1 = $this->getDataGenerator()->create_category();
+
+        $course1 = $this->getDataGenerator()->create_course(array('category' => $cat1->id));
+        $course2 = $this->getDataGenerator()->create_course(array('category' => $cat1->id));
+
+        $group1 = $this->getDataGenerator()->create_group(array('courseid' => $course1->id));
+        $group2 = $this->getDataGenerator()->create_group(array('courseid' => $course2->id));
+
+        $studentrole = $DB->get_record('role', array('shortname' => 'student'));
+
+        $this->getDataGenerator()->enrol_user($user1->id, $course1->id);
+        $this->getDataGenerator()->enrol_user($user2->id, $course1->id);
+        $this->getDataGenerator()->enrol_user($user3->id, $course1->id);
+        $this->getDataGenerator()->enrol_user($user1->id, $course2->id);
+        $this->getDataGenerator()->enrol_user($user2->id, $course2->id);
+        $this->getDataGenerator()->enrol_user($user3->id, $course2->id);
+
+        $cohort1 = $this->getDataGenerator()->create_cohort(
+            array('contextid' => context_coursecat::instance($cat1->id)->id));
+
+        $plugin->add_instance($course1, array(
+                'customint1' => $cohort1->id,
+                'roleid' => $studentrole->id,
+                'customint2' => $group1->id)
+        );
+        $plugin->add_instance($course2, array(
+                'customint1' => $cohort1->id,
+                'roleid' => $studentrole->id,
+                'customint2' => $group2->id)
+        );
+
+        cohort_add_member($cohort1->id, $user1->id);
+        cohort_add_member($cohort1->id, $user2->id);
+        cohort_add_member($cohort1->id, $user3->id);
+
+        $this->assertEquals(3, $DB->count_records('groups_members', ['groupid' => $group1->id]));
+        $this->assertEquals(3, $DB->count_records('groups_members', ['groupid' => $group2->id]));
+
+        $coursecontext1 = context_course::instance($course1->id);
+
+        $approveduserlist = new \core_privacy\local\request\approved_userlist($coursecontext1, 'enrol_groupsync',
+            [$user1->id, $user2->id]);
+        provider::delete_data_for_users($approveduserlist);
+
+        $this->assertEquals(1, $DB->count_records('groups_members', ['groupid' => $group1->id]));
+        $this->assertEquals(3, $DB->count_records('groups_members', ['groupid' => $group2->id]));
+
+        $approveduserlist = new \core_privacy\local\request\approved_userlist($coursecontext1, 'enrol_groupsync',
+            [$user3->id]);
+        provider::delete_data_for_users($approveduserlist);
+
+        $this->assertEquals(0, $DB->count_records('groups_members', ['groupid' => $group1->id]));
+        $this->assertEquals(3, $DB->count_records('groups_members', ['groupid' => $group2->id]));
     }
 }
