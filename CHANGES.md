@@ -1,3 +1,9 @@
+## 1.2.1 ##
+
+* Privacy API updated to fulfil requirements of latest Moodle versions (credit goes
+  to Amaia Anabitarte).
+* Behat test updated for Moodle 3.4, 3.5 and 3.6.
+
 ## 1.2.0 ##
 
 * Implement the privacy API
