@@ -19,10 +19,10 @@ Feature: Cohort membership is one-way synchronised with the group membership
       | Groupcourse 1 | C001   | G1       |
       | Groupcourse 2 | C001   | G2       |
     And I log in as "admin"
-    And I navigate to "Manage enrol plugins" node in "Site administration > Plugins > Enrolments"
+    And I navigate to "Plugins > Enrolments > Manage enrol plugins" in site administration
     And I click on "Enable" "link" in the "Cohort members to group" "table_row"
     And I am on homepage
-    And I navigate to "Cohorts" node in "Site administration > Users > Accounts"
+    And I navigate to "Users > Accounts > Cohorts" in site administration
     And I follow "Add new cohort"
     And I set the following fields to these values:
       | Name        | Even numbered users |
@@ -48,10 +48,12 @@ Feature: Cohort membership is one-way synchronised with the group membership
     When I add "Cohort members to group" enrolment method with:
       | Cohort       | Even numbered users |
       | Add to group | Groupcourse 1       |
+    And I am on "Course 001" course homepage
     And I add "Cohort members to group" enrolment method with:
       | Cohort       | Odd numbered users  |
       | Add to group | Groupcourse 2       |
-    And I navigate to "Enrolled users" node in "Course administration > Users"
+    And I am on "Course 001" course homepage
+    And I navigate to "Users > Enrolled users" in current page administration
     Then I should see "Groupcourse 1" in the "Studie One" "table_row"
     And I should see "Groupcourse 2" in the "Studie Two" "table_row"
     And I should not see "Groupcourse 1" in the "Studie Three" "table_row"
@@ -62,9 +64,12 @@ Feature: Cohort membership is one-way synchronised with the group membership
     When I add "Cohort members to group" enrolment method with:
       | Cohort       | Odd numbered users  |
       | Add to group | Groupcourse 2       |
+    And I am on "Course 001" course homepage
     And I enrol "Studie One" user as "Student"
+    And I am on "Course 001" course homepage
     And I enrol "Studie Two" user as "Student"
-    And I navigate to "Enrolled users" node in "Course administration > Users"
+    And I am on "Course 001" course homepage
+    And I navigate to "Users > Enrolled users" in current page administration
     Then I should see "Groupcourse 2" in the "Studie Two" "table_row"
     And I should not see "Groupcourse 1" in the "Studie Two" "table_row"
     And I should not see "Groupcourse 1" in the "Studie One" "table_row"
@@ -78,9 +83,10 @@ Feature: Cohort membership is one-way synchronised with the group membership
     And I add "Cohort members to group" enrolment method with:
       | Cohort       | Odd numbered users  |
       | Add to group | Groupcourse 2       |
-    And I navigate to "Enrolled users" node in "Course administration > Users"
+    And I am on "Course 001" course homepage
+    And I navigate to "Users > Enrolled users" in current page administration
     And I should not see "Groupcourse 2" in the "Studie Four" "table_row"
     When I add "Studie Four (student4@example.com)" user to "Odd" cohort members
     And I am on "Course 001" course homepage
-    And I navigate to "Enrolled users" node in "Course administration > Users"
+    And I navigate to "Users > Enrolled users" in current page administration
     Then I should see "Groupcourse 2" in the "Studie Four" "table_row"
