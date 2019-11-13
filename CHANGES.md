@@ -1,3 +1,7 @@
+## 1.2.2 ##
+
+* Travis-CI update only.
+
 ## 1.2.1 ##
 
 * Privacy API updated to fulfil requirements of latest Moodle versions (credit goes
