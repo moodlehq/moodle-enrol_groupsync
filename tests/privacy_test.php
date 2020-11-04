@@ -41,7 +41,7 @@ class enrol_groupsync_privacy_testcase extends \core_privacy\tests\provider_test
     /**
      * Basic setup for these tests.
      */
-    public function setUp() {
+    public function setUp(): void {
         $this->enable_plugin();
     }
 
